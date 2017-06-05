@@ -1,5 +1,8 @@
 package com.android.pena.david.bakingapp.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
 
 
 
-public class Recipe{
+public class Recipe {
     private int id;
     private String name;
     private List<Ingredient> ingredients;
@@ -39,4 +42,5 @@ public class Recipe{
     public List<Step> getSteps() {
         return steps;
     }
+
 }

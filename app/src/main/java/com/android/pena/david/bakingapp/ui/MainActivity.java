@@ -1,31 +1,49 @@
 package com.android.pena.david.bakingapp.ui;
 
+import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.R;
 import com.android.pena.david.bakingapp.Utils.ApiClient;
 import com.android.pena.david.bakingapp.Utils.ApiInterface;
+import com.android.pena.david.bakingapp.adapter.RecipesAdapter;
 import com.google.gson.Gson;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    public List<Recipe> recipes;
+    @BindView(R.id.recipes_list) RecyclerView recipeRecyclerView;
+    public static List<Recipe> recipesList;
+    private RecipesAdapter recipesAdapter;
+
+
+    public static Recipe getRecipe(int id){
+        return recipesList.get(id-1);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         getRecipesfromAPI();
+
+
     }
 
     private void getRecipesfromAPI(){
@@ -37,13 +55,38 @@ public class MainActivity extends AppCompatActivity {
         apiCall.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                recipes = response.body();
+                recipesList = response.body();
+                //LinearLayoutManager linear = new LinearLayoutManager(getApplicationContext());
+                GridLayoutManager grid = new GridLayoutManager(getApplicationContext(),1);
+                recipeRecyclerView.setLayoutManager(getGridLayoutManager());
+                recipesAdapter = new RecipesAdapter(getApplicationContext(),recipesList);
+                recipeRecyclerView.setAdapter(recipesAdapter);
             }
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    private GridLayoutManager getGridLayoutManager(){
+        int nColumns;
+        if(getResources().getBoolean(R.bool.isTablet)){
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+               nColumns = 3;
+            }else{
+               nColumns = 2;
+            }
+
+        }else{
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                nColumns = 2;
+            }else{
+                nColumns = 1;
+            }
+        }
+        return new GridLayoutManager(this,nColumns);
     }
 
 
