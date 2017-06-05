@@ -10,10 +10,13 @@ import android.widget.Toast;
 import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.R;
 
+import butterknife.BindView;
+
 public class RecipeActivity extends AppCompatActivity {
 
     private final String RECIPE_TAG = "recipe_id";
-    Recipe mRecipe;
+    private Recipe mRecipe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +27,15 @@ public class RecipeActivity extends AppCompatActivity {
         int recipe_id = getIntent().getIntExtra(RECIPE_TAG,-1);
         mRecipe = MainActivity.getRecipe(recipe_id);
 
-        if(findViewById(R.id.step_fragment) == null ) {
-            Toast.makeText(this, "mobile", Toast.LENGTH_SHORT).show();
+        if(getResources().getBoolean(R.bool.isTablet)) {
+
         }else{
-            Toast.makeText(this, "tablet", Toast.LENGTH_SHORT).show();
+            RecipeFragment recipeFragment = RecipeFragment.newInstance(mRecipe);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_layout, recipeFragment)
+                    .commit();
+
         }
-
-
-       // RecipeFragment recipeFragment = new RecipeFragment();
-//        StepFragment stepFragment = new StepFragment();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .add(R.id.fragment_layout, stepFragment)
-//                .commit();
     }
 }

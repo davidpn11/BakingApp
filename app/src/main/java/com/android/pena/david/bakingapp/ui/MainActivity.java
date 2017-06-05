@@ -1,6 +1,7 @@
 package com.android.pena.david.bakingapp.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRecipesfromAPI(){
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
         final ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         apiCall.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+
+                progressDialog.dismiss();
                 recipesList = response.body();
                 //LinearLayoutManager linear = new LinearLayoutManager(getApplicationContext());
                 GridLayoutManager grid = new GridLayoutManager(getApplicationContext(),1);
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
             }
         });
