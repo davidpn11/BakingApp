@@ -43,7 +43,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bindRecipeData(recipesArray.get(position),mContext);
+        holder.bindRecipeData(recipesArray.get(position));
 
     }
 
@@ -71,10 +71,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             recipeView.setOnClickListener(this);
         }
 
-        private void bindRecipeData(Recipe recipe, Context context){
+        private void bindRecipeData(Recipe recipe){
             this.recipe = recipe;
             recipeName.setText(recipe.getName());
-            String nServings = recipe.getServings()+" "+ context.getResources().getString(R.string.recipe_servings);
+            String nServings = recipe.getServings()+" "+ mContext.getResources().getString(R.string.recipe_servings);
             recipeServings.setText(nServings);
 
         }

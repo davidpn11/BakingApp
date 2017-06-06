@@ -4,6 +4,9 @@ package com.android.pena.david.bakingapp.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.TextView;
 import com.android.pena.david.bakingapp.Model.Ingredient;
 import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.R;
+import com.android.pena.david.bakingapp.adapter.StepAdapter;
 
 import java.util.List;
 
@@ -25,9 +29,11 @@ import butterknife.ButterKnife;
 public class RecipeFragment extends Fragment {
 
     @BindView(R.id.ingredients_list) TextView ingredients_list;
-
+    @BindView(R.id.steps_list) RecyclerView stepsList;
     private static final String RECIPE_PARCELABLE = "recipe_parcelable";
     private Recipe recipe;
+    private StepAdapter stepAdapter;
+
 
     public RecipeFragment(){
     }
@@ -55,6 +61,12 @@ public class RecipeFragment extends Fragment {
         ButterKnife.bind(this,view);
 
         ingredients_list.setText(buildIngredientsCard(recipe.getIngredients()));
+
+        stepsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        stepAdapter = new StepAdapter(getContext(),recipe.getSteps());
+        stepsList.setAdapter(stepAdapter);
+        stepsList.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         return view;
     }
 
