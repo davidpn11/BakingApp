@@ -1,6 +1,7 @@
 package com.android.pena.david.bakingapp.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
@@ -11,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.pena.david.bakingapp.Model.Ingredient;
 import com.android.pena.david.bakingapp.Model.Recipe;
+import com.android.pena.david.bakingapp.Model.Step;
 import com.android.pena.david.bakingapp.R;
 import com.android.pena.david.bakingapp.adapter.StepAdapter;
 
@@ -26,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by david on 01/06/17.
  */
 
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements StepAdapter.ListItemClickListener{
 
     @BindView(R.id.ingredients_list) TextView ingredients_list;
     @BindView(R.id.steps_list) RecyclerView stepsList;
@@ -34,6 +37,26 @@ public class RecipeFragment extends Fragment {
     private Recipe recipe;
     private StepAdapter stepAdapter;
 
+    onStepClickListener onStepClickListener;
+
+
+
+
+    public interface onStepClickListener{
+        void onStepClicked(Step step);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            onStepClickListener = (onStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnImageClickListener");
+        }
+    }
 
     public RecipeFragment(){
     }
@@ -63,10 +86,11 @@ public class RecipeFragment extends Fragment {
         ingredients_list.setText(buildIngredientsCard(recipe.getIngredients()));
 
         stepsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        stepAdapter = new StepAdapter(getContext(),recipe.getSteps());
+        stepAdapter = new StepAdapter(getContext(),recipe.getSteps(),this);
         stepsList.setAdapter(stepAdapter);
         stepsList.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
         return view;
     }
 
@@ -84,5 +108,10 @@ public class RecipeFragment extends Fragment {
                          .append("\n");
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    public void onListItemClick(Step step) {
+        onStepClickListener.onStepClicked(step);
     }
 }

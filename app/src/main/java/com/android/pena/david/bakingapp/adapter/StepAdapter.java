@@ -24,11 +24,18 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
     public List<Step> stepsArray;
     private Context mContext;
+    private final ListItemClickListener listItemClickListener;
 
-    public StepAdapter(Context context, List<Step> stepsArray){
+    public interface ListItemClickListener{
+        void onListItemClick(Step step);
+    }
+
+    public StepAdapter(Context context, List<Step> stepsArray, ListItemClickListener listener){
         this.stepsArray = stepsArray;
         this.mContext = context;
+        listItemClickListener = listener;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,7 +74,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(mContext, "halloooo", Toast.LENGTH_SHORT).show();
+            listItemClickListener.onListItemClick(step);
         }
     }
 }

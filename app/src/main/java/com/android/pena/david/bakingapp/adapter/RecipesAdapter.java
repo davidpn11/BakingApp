@@ -29,6 +29,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     private Context mContext;
 
     public RecipesAdapter(Context pContext, List<Recipe> recipes){
+        setHasStableIds(true);
         this.recipesArray = recipes;
         this.mContext = pContext;
 
