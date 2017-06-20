@@ -2,6 +2,7 @@ package com.android.pena.david.bakingapp.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.android.pena.david.bakingapp.adapter.RecipesAdapter;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +31,14 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String WIDGET_RECIPE = "widget_recipe";
+    private static final String WIDGET_ACTION = "ACTION_GET_RECIPE";
+    private static final String RECIPE_TAG = "recipe_id";
+
     @BindView(R.id.recipes_list) RecyclerView recipeRecyclerView;
     public static List<Recipe> recipesList;
     private RecipesAdapter recipesAdapter;
+
 
 
     public static Recipe getRecipe(int id){
@@ -43,9 +50,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
         getRecipesfromAPI();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(getIntent().getAction().equals(WIDGET_ACTION)){
+            Toast.makeText(this, "veio do widget:  "+getIntent().getIntExtra(WIDGET_RECIPE,-1), Toast.LENGTH_LONG).show();
+            widgetRecipe(getIntent().getIntExtra(WIDGET_RECIPE,-1));
+
+        }
+    }
+
+
+    private void widgetRecipe(int recipe_id){
+
+        if (recipe_id > 0) {
+            Intent it = new Intent(MainActivity.this, RecipeActivity.class);
+            it.putExtra(RECIPE_TAG,recipe_id);
+            startActivity(it);
+        }
     }
 
     private void getRecipesfromAPI(){
