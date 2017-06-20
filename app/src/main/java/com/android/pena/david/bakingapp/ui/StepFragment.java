@@ -181,7 +181,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
 
 
     private void checkOrientation(){
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !(getResources().getBoolean(R.bool.isTablet))){
             ((RecipeActivity) getActivity()).getSupportActionBar().hide();
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
         }
@@ -217,10 +217,15 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
 
     private void initializePlayer(String video_url){
 
-
+        String video = video_url;
         if(stepPlayer != null || video_url.isEmpty()){
-            no_video_icon.setVisibility(View.VISIBLE);
-            return;
+
+            if (!step.getThumbnailURL().isEmpty()) {
+                video = step.getThumbnailURL();
+            }else{
+                no_video_icon.setVisibility(View.VISIBLE);
+                return;
+            }
         }
 
         @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
@@ -238,7 +243,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
         stepPlayer.addListener(this);
         stepPlayerView.setPlayer(stepPlayer);
         stepPlayer.setPlayWhenReady(autoPlay);
-        Uri uri = Uri.parse(video_url);
+        Uri uri = Uri.parse(video);
         MediaSource mediaSource = new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                 mainHandler, null);
 

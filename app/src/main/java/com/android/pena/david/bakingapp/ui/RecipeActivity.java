@@ -43,6 +43,11 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         if(getResources().getBoolean(R.bool.isTablet)) {
 
+            RecipeFragment recipeFragment = RecipeFragment.newInstance(mRecipe);
+            fragmentManager.beginTransaction()
+                    .add(R.id.list_fragment, recipeFragment)
+                    .commit();
+
         }else{
             RecipeFragment recipeFragment = RecipeFragment.newInstance(mRecipe);
             fragmentManager.beginTransaction()
@@ -63,28 +68,57 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
     @Override
     public void onStepClicked(Step step) {
-        StepFragment stepFrag = StepFragment.newInstance(step,num_steps);
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
-                .commit();
+
+        if(!getResources().getBoolean(R.bool.isTablet)) {
+            StepFragment stepFrag = StepFragment.newInstance(step,num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
+                    .commit();
+        }else {
+            StepFragment stepFrag = StepFragment.newInstance(step,num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.step_fragment,stepFrag)
+                    .commit();
+        }
+
     }
 
     @Override
     public void nextStep(int id) {
+
         Step nextStep = mRecipe.getSteps().get(id+1);
-        StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
-                .commit();
+        if(!getResources().getBoolean(R.bool.isTablet)) {
+            StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
+                    .commit();
+        }else{
+            StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.step_fragment,stepFrag)
+                    .commit();
+
+
+        }
+
     }
 
     @Override
     public void previousStep(int id) {
-        Step nextStep = mRecipe.getSteps().get(id-1);
-        StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
-                .commit();
+
+        Step previousStep = mRecipe.getSteps().get(id - 1);
+        if(!getResources().getBoolean(R.bool.isTablet)) {
+            StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_layout, stepFrag).addToBackStack(null)
+                    .commit();
+        }else{
+            StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_layout, stepFrag)
+                    .commit();
+
+        }
 
     }
 }
