@@ -49,7 +49,6 @@ public class RecipeFragment extends Fragment implements StepAdapter.ListItemClic
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             onStepClickListener = (onStepClickListener) context;
         } catch (ClassCastException e) {
@@ -58,8 +57,13 @@ public class RecipeFragment extends Fragment implements StepAdapter.ListItemClic
         }
     }
 
-    public RecipeFragment(){
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onStepClickListener = null;
     }
+
+    public RecipeFragment(){}
 
     public static RecipeFragment newInstance(Recipe recipe){
         RecipeFragment fragment = new RecipeFragment();
@@ -90,7 +94,6 @@ public class RecipeFragment extends Fragment implements StepAdapter.ListItemClic
         stepsList.setAdapter(stepAdapter);
         stepsList.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-
         return view;
     }
 
