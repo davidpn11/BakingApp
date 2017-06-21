@@ -1,24 +1,16 @@
 package com.android.pena.david.bakingapp.ui;
 
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Toast;
+
 
 import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.Model.Step;
 import com.android.pena.david.bakingapp.R;
-import com.android.pena.david.bakingapp.adapter.StepAdapter;
 
-import butterknife.BindView;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeFragment.onStepClickListener,
         StepFragment.onChangeStepListener{
@@ -29,17 +21,12 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     private FragmentManager fragmentManager;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        fragmentManager = getSupportFragmentManager();
-        int recipe_id = getIntent().getIntExtra(RECIPE_TAG,-1);
-        mRecipe = MainActivity.getRecipe(recipe_id);
-        setTitle(mRecipe.getName());
-        num_steps = mRecipe.getSteps().size();
+
+        startActivityValues();
 
         if(getResources().getBoolean(R.bool.isTablet)) {
 
@@ -51,11 +38,19 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         }else{
             RecipeFragment recipeFragment = RecipeFragment.newInstance(mRecipe);
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_layout, recipeFragment)
+                    .add(R.id.fragment_layout, recipeFragment).addToBackStack(null)
                     .commit();
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(fragmentManager.getBackStackEntryCount()==0){
+            finish();
+        }
+    }
 
     @Override
     public void onStepClicked(Step step) {
@@ -63,7 +58,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         if(!getResources().getBoolean(R.bool.isTablet)) {
             StepFragment stepFrag = StepFragment.newInstance(step,num_steps);
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
+                    .replace(R.id.fragment_layout,stepFrag)
+                    .addToBackStack(null)
                     .commit();
         }else {
             StepFragment stepFrag = StepFragment.newInstance(step,num_steps);
@@ -81,7 +77,8 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         if(!getResources().getBoolean(R.bool.isTablet)) {
             StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_layout,stepFrag).addToBackStack(null)
+                    .replace(R.id.fragment_layout,stepFrag)
+                    .addToBackStack(null)
                     .commit();
         }else{
             StepFragment stepFrag = StepFragment.newInstance(nextStep,num_steps);
@@ -101,7 +98,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         if(!getResources().getBoolean(R.bool.isTablet)) {
             StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_layout, stepFrag).addToBackStack(null)
+                    .replace(R.id.fragment_layout, stepFrag)
                     .commit();
         }else{
             StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);
@@ -111,5 +108,21 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
 
         }
 
+    }
+
+
+    private void startActivityValues(){
+
+        //Set recipe and number of steps
+        int recipe_id = getIntent().getIntExtra(RECIPE_TAG,-1);
+        mRecipe = MainActivity.getRecipe(recipe_id);
+        num_steps = mRecipe.getSteps().size();
+
+
+        //set ActionBar and FragmentManager
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(mRecipe.getName());
+        fragmentManager = getSupportFragmentManager();
     }
 }

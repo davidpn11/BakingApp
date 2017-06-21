@@ -88,12 +88,12 @@ public class RecipeFragment extends Fragment implements StepAdapter.ListItemClic
         ButterKnife.bind(this,view);
 
         ingredients_list.setText(buildIngredientsCard(recipe.getIngredients()));
-
         stepsList.setLayoutManager(new LinearLayoutManager(getContext()));
         stepAdapter = new StepAdapter(getContext(),recipe.getSteps(),this);
         stepsList.setAdapter(stepAdapter);
         stepsList.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        stepsList.setNestedScrollingEnabled(false);
         return view;
     }
 

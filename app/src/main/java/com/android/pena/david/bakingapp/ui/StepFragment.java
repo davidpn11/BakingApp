@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,7 +126,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("onCreateView","onCreateView");
+
         View view = inflater.inflate(R.layout.step_fragment,container,false);
         ButterKnife.bind(this,view);
         resumePosition = -1;
@@ -182,7 +184,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
 
     private void checkOrientation(){
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !(getResources().getBoolean(R.bool.isTablet))){
-            ((RecipeActivity) getActivity()).getSupportActionBar().hide();
+            ActionBar tool = ((RecipeActivity) getActivity()).getSupportActionBar();
+            tool.hide();
+
             getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
         }
     }

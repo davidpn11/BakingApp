@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private void widgetRecipe(int recipe_id){
 
         if (recipe_id > 0) {
+//            Toast.makeText(this, String.valueOf(recipe_id), Toast.LENGTH_SHORT).show();
             Intent it = new Intent(MainActivity.this, RecipeActivity.class);
             it.putExtra(RECIPE_TAG,recipe_id);
             startActivity(it);

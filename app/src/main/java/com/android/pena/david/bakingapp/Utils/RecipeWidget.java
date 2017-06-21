@@ -1,4 +1,4 @@
-package com.android.pena.david.bakingapp;
+package com.android.pena.david.bakingapp.Utils;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.android.pena.david.bakingapp.R;
 import com.android.pena.david.bakingapp.ui.MainActivity;
 
 import java.util.Random;
@@ -24,13 +25,13 @@ public class RecipeWidget extends AppWidgetProvider {
                                 int appWidgetId) {
         String[] recipe_names = {"Nutella Pie","Brownies","Yellow Cake","Cheesecake"};
         Random r = new Random();
-        int recipe_id = r.nextInt(3)+1;
+        int recipe_id = r.nextInt(3);
         Log.e("iD",String.valueOf(recipe_id));
 
 
         Intent it = new Intent(context, MainActivity.class);
         it.setAction(WIDGET_ACTION);
-        it.putExtra(WIDGET_RECIPE,recipe_id);
+        it.putExtra(WIDGET_RECIPE,recipe_id+1);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,it,PendingIntent.FLAG_UPDATE_CURRENT);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
