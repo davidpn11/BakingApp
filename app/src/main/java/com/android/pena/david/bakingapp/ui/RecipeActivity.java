@@ -57,17 +57,6 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
     }
 
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onStepClicked(Step step) {
 

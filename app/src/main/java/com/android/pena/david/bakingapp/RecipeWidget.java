@@ -17,8 +17,8 @@ import java.util.Random;
  */
 public class RecipeWidget extends AppWidgetProvider {
 
-    private static String WIDGET_RECIPE = "widget_recipe";
-    private static String WIDGET_ACTION = "ACTION_GET_RECIPE";
+    private static final String WIDGET_RECIPE = "widget_recipe";
+    private static final String WIDGET_ACTION = "ACTION_GET_RECIPE";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {

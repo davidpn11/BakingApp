@@ -20,6 +20,7 @@ import com.android.pena.david.bakingapp.Utils.ApiInterface;
 import com.android.pena.david.bakingapp.adapter.RecipesAdapter;
 import com.google.gson.Gson;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Random;
 
@@ -50,18 +51,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-
         getRecipesfromAPI();
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if(getIntent().getAction().equals(WIDGET_ACTION)){
-            Toast.makeText(this, "veio do widget:  "+getIntent().getIntExtra(WIDGET_RECIPE,-1), Toast.LENGTH_LONG).show();
             widgetRecipe(getIntent().getIntExtra(WIDGET_RECIPE,-1));
 
         }
@@ -94,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
                 recipesList = response.body();
-                //LinearLayoutManager linear = new LinearLayoutManager(getApplicationContext());
                 GridLayoutManager grid = new GridLayoutManager(getApplicationContext(),1);
                 recipeRecyclerView.setLayoutManager(getGridLayoutManager());
                 recipesAdapter = new RecipesAdapter(getApplicationContext(),recipesList);
@@ -104,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
