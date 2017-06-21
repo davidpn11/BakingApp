@@ -1,4 +1,4 @@
-#Baking App
+# Baking App
 
 Fully funcional Android app made for Udacity's Android Developer Nanodegree.
 
@@ -8,7 +8,7 @@ Fully funcional Android app made for Udacity's Android Developer Nanodegree.
 * Adaptative UI for both smartphones and tablets
 
 
-##Libraries:
+## Libraries:
 * [ButterKnife](https://github.com/JakeWharton/butterknife)
 * [ExoPlayer](https://github.com/google/ExoPlayer)
 * [Retrofit](https://github.com/square/retrofit)
