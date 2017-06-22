@@ -99,6 +99,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
             StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_layout, stepFrag)
+                    .addToBackStack(null)
                     .commit();
         }else{
             StepFragment stepFrag = StepFragment.newInstance(previousStep, num_steps);

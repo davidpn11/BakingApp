@@ -15,10 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
+
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/exoplayer"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
+
+        <ImageView
+            android:id="@+id/video_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <ImageView
+            android:id="@+id/play_button"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:src="@mipmap/ic_play"/>
 
         <ProgressBar
             android:id="@+id/video_buffering"

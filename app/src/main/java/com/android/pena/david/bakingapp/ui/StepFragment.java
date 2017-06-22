@@ -53,6 +53,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
 
@@ -69,6 +70,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     @BindView(R.id.exoplayer) SimpleExoPlayerView stepPlayerView;
     @BindView(R.id.video_buffering) ProgressBar video_buffering;
     @BindView(R.id.refresh_button) ImageView refresh_btn;
+    @BindView(R.id.play_button) ImageView play_btn;
+    @BindView(R.id.video_thumbnail) ImageView video_thumbnail;
     @BindView(R.id.no_video) ImageView no_video_icon;
     @Nullable @BindView(R.id.next_fab) FloatingActionButton next_fab;
     @Nullable @BindView(R.id.previous_fab) FloatingActionButton previous_fab;
@@ -129,21 +132,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
 
         View view = inflater.inflate(R.layout.step_fragment,container,false);
         ButterKnife.bind(this,view);
-        resumePosition = -1;
-        hasResume = false;
-        userAgent = Util.getUserAgent(context,"BakingApp");
-        refresh_btn.setOnClickListener(this);
-        autoPlay = false;
-        mediaDataSourceFactory = new DefaultDataSourceFactory(context,BANDWIDTH_METER,
-                new DefaultHttpDataSourceFactory(userAgent,BANDWIDTH_METER));
-        mainHandler = new Handler();
-        stepPlayerView.requestFocus();
 
-        setFabs();
-        if(descrition_textview != null){
-            descrition_textview.setText(step.getDescription());
-        }
-
+        loadData();
 
         return view;
     }
@@ -153,7 +143,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
-            initializePlayer(step.getVideoURL());
+            startPlayer(step.getVideoURL());
         }
     }
 
@@ -161,7 +151,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     public void onResume() {
         super.onResume();
         if ((Util.SDK_INT <= 23 || stepPlayer == null)) {
-            initializePlayer(step.getVideoURL());
+            startPlayer(step.getVideoURL());
         }
     }
 
@@ -179,6 +169,25 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
         if (Util.SDK_INT > 23) {
             releasePlayer();
         }
+    }
+
+
+    private void loadData(){
+        resumePosition = -1;
+        hasResume = false;
+        userAgent = Util.getUserAgent(context,"BakingApp");
+        refresh_btn.setOnClickListener(this);
+        autoPlay = true;
+        mediaDataSourceFactory = new DefaultDataSourceFactory(context,BANDWIDTH_METER,
+                new DefaultHttpDataSourceFactory(userAgent,BANDWIDTH_METER));
+        mainHandler = new Handler();
+        stepPlayerView.requestFocus();
+
+        setFabs();
+        if(descrition_textview != null){
+            descrition_textview.setText(step.getDescription());
+        }
+
     }
 
 
@@ -219,17 +228,42 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     }
 
 
-    private void initializePlayer(String video_url){
+    private void startPlayer(final String video_url){
 
-        String video = video_url;
-        if(stepPlayer != null || video_url.isEmpty()){
+        if (!step.getThumbnailURL().isEmpty()) {
+            Picasso.Builder builder = new Picasso.Builder(getContext());
+            builder.listener(new Picasso.Listener()
+            {
+                @Override
+                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+                {
+                    initializeVideoPlayer(video_url);
+                    play_btn.setVisibility(View.GONE);
+                }
 
-            if (!step.getThumbnailURL().isEmpty()) {
-                video = step.getThumbnailURL();
-            }else{
-                no_video_icon.setVisibility(View.VISIBLE);
-                return;
-            }
+            });
+            builder.build().load(step.getThumbnailURL()).into(video_thumbnail);
+            play_btn.setVisibility(View.VISIBLE);
+            play_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    play_btn.setVisibility(View.GONE);
+                    initializeVideoPlayer(video_url);
+                }
+            });
+        }else {
+            video_thumbnail.setVisibility(View.GONE);
+            initializeVideoPlayer(video_url);
+        }
+    }
+
+
+    private void initializeVideoPlayer(String video_url){
+
+
+        if(stepPlayer != null || video_url.isEmpty()) {
+            no_video_icon.setVisibility(View.VISIBLE);
+            return;
         }
 
         @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode =
@@ -247,7 +281,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
         stepPlayer.addListener(this);
         stepPlayerView.setPlayer(stepPlayer);
         stepPlayer.setPlayWhenReady(autoPlay);
-        Uri uri = Uri.parse(video);
+        Uri uri = Uri.parse(video_url);
         MediaSource mediaSource = new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                 mainHandler, null);
 

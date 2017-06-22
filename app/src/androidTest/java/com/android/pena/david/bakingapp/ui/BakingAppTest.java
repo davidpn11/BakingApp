@@ -8,9 +8,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.android.pena.david.bakingapp.R;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -66,11 +68,17 @@ public class BakingAppTest {
         onView(withId(R.id.steps_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
+        ViewInteraction exoPlayer = onView(allOf(withId(R.id.exoplayer),instanceOf(SimpleExoPlayerView.class))).check(matches(isDisplayed()));
         ViewInteraction exoPause = onView(withId(R.id.exo_pause)).check(matches(isDisplayed()));
 
-        waitAction(2000);
+        waitAction(5000);
 
-        exoPause.perform(click());
+        try {
+            exoPause.perform(click());
+        } catch (Exception e) {
+            exoPlayer.perform(click());
+            exoPause.perform(click());
+        }
         onView(withId(R.id.exo_prev)).perform(click());
 
         waitAction(2000);
@@ -78,7 +86,7 @@ public class BakingAppTest {
         onView(withId(R.id.exo_play)).perform(click());
         onView(withId(R.id.exo_ffwd)).perform(click());
 
-        waitAction(2000);
+        waitAction(4000);
 
         onView(allOf(withId(R.id.refresh_button), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
                 .perform(click());
