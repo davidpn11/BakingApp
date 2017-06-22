@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.android.pena.david.bakingapp.Model.Ingredient;
+import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.R;
 import com.android.pena.david.bakingapp.ui.MainActivity;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,23 +26,46 @@ public class RecipeWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        String[] recipe_names = {"Nutella Pie","Brownies","Yellow Cake","Cheesecake"};
+
         Random r = new Random();
         int recipe_id = r.nextInt(3);
-        Log.e("iD",String.valueOf(recipe_id));
-
 
         Intent it = new Intent(context, MainActivity.class);
         it.setAction(WIDGET_ACTION);
         it.putExtra(WIDGET_RECIPE,recipe_id+1);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,it,PendingIntent.FLAG_UPDATE_CURRENT);
-
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.recipe_name,recipe_names[recipe_id]);
+        views.setOnClickPendingIntent(R.id.widget_layout,pendingIntent);
 
-        views.setOnClickPendingIntent(R.id.widget_image,pendingIntent);
+        Recipe recipe = MainActivity.getRecipe(recipe_id+1);
+
+        if(recipe != null){
+            views.setTextViewText(R.id.recipe_name,recipe.getName());
+            views.setTextViewText(R.id.recipe_ingredients,buildIngredientsCard(recipe.getIngredients()));
+        }else{
+            views.setTextViewText(R.id.recipe_name,"Loading data...");
+            views.setTextViewText(R.id.recipe_ingredients,null);
+
+        }
+
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    private static String buildIngredientsCard(List<Ingredient> list){
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(Ingredient ingredient : list){
+            stringBuilder.append("\u2022 ")
+                    .append(ingredient.getQuantity())
+                    .append(" ")
+                    .append(ingredient.getMeasure())
+                    .append(" of ")
+                    .append(ingredient.getIngredient())
+                    .append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     @Override

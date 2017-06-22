@@ -43,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static Recipe getRecipe(int id){
-        return recipesList.get(id-1);
+
+        if(recipesList != null){
+            return recipesList.get(id-1);
+        }else{
+            return null;
+        }
+
     }
 
     @Override

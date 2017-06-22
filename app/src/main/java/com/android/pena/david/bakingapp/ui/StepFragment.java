@@ -133,7 +133,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
         hasResume = false;
         userAgent = Util.getUserAgent(context,"BakingApp");
         refresh_btn.setOnClickListener(this);
-        autoPlay = true;
+        autoPlay = false;
         mediaDataSourceFactory = new DefaultDataSourceFactory(context,BANDWIDTH_METER,
                 new DefaultHttpDataSourceFactory(userAgent,BANDWIDTH_METER));
         mainHandler = new Handler();

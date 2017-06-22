@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.android.pena.david.bakingapp.Model.Recipe;
 import com.android.pena.david.bakingapp.R;
 import com.android.pena.david.bakingapp.ui.RecipeActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -78,6 +79,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             String nServings = recipe.getServings()+" "+ mContext.getResources().getString(R.string.recipe_servings);
             recipeServings.setText(nServings);
 
+            if(!recipe.getImage().isEmpty()){
+                Picasso.with(mContext).load(recipe.getImage()).into(recipeImage);
+            }
         }
 
         @Override
