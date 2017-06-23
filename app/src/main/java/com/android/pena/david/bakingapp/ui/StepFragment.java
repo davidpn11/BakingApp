@@ -194,9 +194,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener, I
     private void checkOrientation(){
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !(getResources().getBoolean(R.bool.isTablet))){
             ActionBar tool = ((RecipeActivity) getActivity()).getSupportActionBar();
-            tool.hide();
-
-            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
+            if(tool != null){
+                tool.hide();
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //Remove notification bar
+            }
         }
     }
 

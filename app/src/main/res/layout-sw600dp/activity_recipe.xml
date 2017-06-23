@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <LinearLayout
-        android:id="@+id/list_fragment"
-        android:name="com.android.pena.david.bakingapp.ui.RecipeFragment"
-        android:layout_width="300dp"
-        android:orientation="vertical"
-        android:layout_height="match_parent"/>
-    
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
-        />
 
+    <include layout="@layout/toolbar"/>
     <LinearLayout
-        android:id="@+id/step_fragment"
-        android:name="com.android.pena.david.bakingapp.ui.StepFragment"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/list_fragment"
+            android:name="com.android.pena.david.bakingapp.ui.RecipeFragment"
+            android:layout_width="300dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            />
+
+        <LinearLayout
+            android:id="@+id/step_fragment"
+            android:name="com.android.pena.david.bakingapp.ui.StepFragment"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
 </LinearLayout>

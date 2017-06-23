@@ -26,6 +26,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+
         startActivityValues();
 
         if(getResources().getBoolean(R.bool.isTablet)) {
@@ -123,7 +124,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
         //set ActionBar and FragmentManager
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mRecipe.getName());
+
         fragmentManager = getSupportFragmentManager();
     }
 }

@@ -62,6 +62,8 @@ public class BakingAppTest {
 
     @Test
     public void exoPlayerTest() {
+
+        waitAction(1000);
         onView(withId(R.id.recipes_list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 

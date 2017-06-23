@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.RecipeActivity"
-            android:theme="@style/RecipeTheme"/>
+            android:theme="@style/RecipeTheme"
+            android:parentActivityName=".ui.MainActivity"/>
 
         <receiver android:name=".Utils.RecipeWidget">
             <intent-filter>
